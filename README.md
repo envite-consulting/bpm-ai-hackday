@@ -8,10 +8,13 @@ In this project, we utilize Camunda 8 to orchestrate an AI-driven workflow. Our 
 This repository hosts the preconfigured backend service for the Envite BPM AI Hackday. Camunda 8 operates within Docker containers, providing a flexible environment for orchestrating AI-driven workflows. The Spring Boot backend service harnesses the power of the Langchain4J Framework to integrate cutting-edge AI capabilities. It can either be launched directly from the IDE or deployed as a Docker container.
 
 # 📙 Prerequisites
+- The OpenAI API key that has been provided
 - Docker: https://docs.docker.com/get-docker/
 - Camunda Modeler: https://camunda.com/de/download/modeler/
 
 # 🚀 Quick Start Guide
+Enter your OpenAI API key in the `application.yaml` file located in the `src/main/resources` directory. The key should be assigned to the `langchain4j.open-ai.chat-model.api-key` property.
+
 To build the backend application, execute `mvn clean install` in the root directory. Subsequently, run `docker-compose up --build` to containerize the backend service and initiate Camunda 8.
 
 You can now access the various web applications. Use the username `demo` and the password `demo` to log in.

@@ -1,0 +1,31 @@
+server:
+    port: 8700
+spring:
+    servlet:
+        multipart:
+            enabled: true
+            location: ${java.io.tmpdir}
+zeebe:
+    client:
+        broker:
+            gateway-address: 127.0.0.1:26500
+        security:
+            plaintext: true
+
+langchain4j:
+    open-ai:
+        chat-model:
+            api-key:
+            organization-id: "org-coZiIU5ePTvPF3oSiNSgdUP6"
+            model-name: gpt-3.5-turbo
+            temperature: 0.5
+            timeout: PT60S
+            log-requests: false
+            log-responses: false
+logging:
+    level:
+        com.envite.bpmmeetsai: DEBUG
+        dev:
+            langchain4j: DEBUG
+            ai4j:
+                openai4j: DEBUG

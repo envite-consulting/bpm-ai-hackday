@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1428cql" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.19.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.4.0">
+  <bpmn:collaboration id="Collaboration_1mw5qvr">
+    <bpmn:participant id="Participant_1x7xd6w" processRef="Test_Process2" />
+  </bpmn:collaboration>
+  <bpmn:process id="Test_Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Start">
+      <bpmn:outgoing>Flow_1snqdt7</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1snqdt7" sourceRef="StartEvent_1" targetRef="UserTaskTest" />
+    <bpmn:sequenceFlow id="Flow_02qwkh1" sourceRef="UserTaskTest" targetRef="ServiceTaskTest" />
+    <bpmn:endEvent id="Event_1qwu0pu">
+      <bpmn:incoming>Flow_07ox32h</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_07ox32h" sourceRef="ServiceTaskTest" targetRef="Event_1qwu0pu" />
+    <bpmn:userTask id="UserTaskTest" name="Test Human Task">
+      <bpmn:incoming>Flow_1snqdt7</bpmn:incoming>
+      <bpmn:outgoing>Flow_02qwkh1</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="ServiceTaskTest" name="Test Service Task">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="testWorker" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02qwkh1</bpmn:incoming>
+      <bpmn:outgoing>Flow_07ox32h</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1mw5qvr">
+      <bpmndi:BPMNShape id="Participant_1x7xd6w_di" bpmnElement="Participant_1x7xd6w" isHorizontal="true">
+        <dc:Bounds x="152" y="85" width="600" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="212" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="218" y="225" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1qwu0pu_di" bpmnElement="Event_1qwu0pu">
+        <dc:Bounds x="622" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_193cz5i_di" bpmnElement="UserTaskTest">
+        <dc:Bounds x="300" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wjhq14_di" bpmnElement="ServiceTaskTest">
+        <dc:Bounds x="460" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1snqdt7_di" bpmnElement="Flow_1snqdt7">
+        <di:waypoint x="248" y="200" />
+        <di:waypoint x="300" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02qwkh1_di" bpmnElement="Flow_02qwkh1">
+        <di:waypoint x="400" y="200" />
+        <di:waypoint x="460" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07ox32h_di" bpmnElement="Flow_07ox32h">
+        <di:waypoint x="560" y="200" />
+        <di:waypoint x="622" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

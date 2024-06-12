@@ -1,11 +1,11 @@
-# ✨ Envite BPM AI Hackday: Integrating BPM with AI
+# ✨ envite BPM AI Hackday: Integrating BPM with AI
 
 Elevating Business Process Management (BPM) by integrating it with Artificial Intelligence (AI) and Machine Learning (ML).
 
 In this project, we utilize Camunda 8 to orchestrate an AI-driven workflow. Our objective is to create connectors and establish BPMN patterns that harness the capabilities of machine learning and large language models, enabling the safe automation of such workflows.
 
 # 🔭 Overview
-This repository hosts the preconfigured backend service for the Envite BPM AI Hackday. Camunda 8 operates within Docker containers, providing a flexible environment for orchestrating AI-driven workflows. The Spring Boot backend service harnesses the power of the Langchain4J Framework to integrate cutting-edge AI capabilities. It can either be launched directly from the IDE or deployed as a Docker container.
+This repository hosts the preconfigured backend service for the envite BPM AI Hackday. Camunda 8 operates within Docker containers, providing a flexible environment for orchestrating AI-driven workflows. The Spring Boot backend service harnesses the power of the Langchain4J Framework to integrate cutting-edge AI capabilities. It can either be launched directly from the IDE or deployed as a Docker container.
 
 # 📙 Prerequisites
 - The OpenAI API key that has been provided
@@ -41,3 +41,6 @@ Please ensure that the backend service is either executed from the IDE or deploy
 - [Langchain4J Spring Examples Repo](https://github.com/langchain4j/langchain4j-spring)
 - [Tips for Promt Engineering](https://medium.com/@karankakwani/mastering-prompt-engineering-for-chatgpt-tips-tricks-and-best-practices-a2d01b703dab)
 - [Camunda Platform Repo](https://github.com/camunda/camunda-platform)
+
+![envite consulting GmbH](assets/envite-black.png#gh-light-mode-only)
+![envite consulting GmbH](assets/envite-white.png#gh-dark-mode-only)

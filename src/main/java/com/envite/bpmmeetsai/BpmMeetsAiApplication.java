@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@Deployment(resources = "classpath:test_process.bpmn")
+@Deployment(resources = "classpath:ticket_process.bpmn")
 public class BpmMeetsAiApplication {
 
 	public static void main(String[] args) {

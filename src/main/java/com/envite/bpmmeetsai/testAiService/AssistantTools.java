@@ -8,8 +8,8 @@ import java.time.LocalTime;
 @Component
 class AssistantTools {
 
-    @Tool
-    String currentTime() {
-        return LocalTime.now().toString();
-    }
+//    @Tool
+//    String currentTime() {
+//        return LocalTime.now().toString();
+//    }
 }

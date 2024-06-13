@@ -1,0 +1,23 @@
+{
+  "components": [
+    {
+      "label": "answer",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1krmwfh",
+        "columns": null
+      },
+      "id": "Field_0jyxpjm",
+      "key": "textfield_answer"
+    }
+  ],
+  "type": "default",
+  "id": "Form_1bwatnm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.5.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.24.0"
+  },
+  "schemaVersion": 16
+}

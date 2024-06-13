@@ -18,12 +18,12 @@ public class CustomerServiceResponseWorker {
 
     private final SentimentAnalysisService sentimentAnalysisService;
 
-    @JobWorker(name = "analyzeAnswer")
-    public void analyzeAnswer(final JobClient client, final ActivatedJob job) {
+    @JobWorker(name = "analysiereAnfrage")
+    public void analysiereAnfrage(final JobClient client, final ActivatedJob job) {
         final Map<String, Object> variables = job.getVariablesAsMap();
-        final String answer = (String) variables.get("OutputVariable_customerServiceAnswer");
-        String analysis = sentimentAnalysisService.analyze(answer);
-        log.info("Received answer '{}' for message '{}", analysis, answer);
-        client.newCompleteCommand(job.getKey()).send().join();
+        final String message = (String) variables.get("OutputVariable_kundenAnfrage");
+        boolean analysis = sentimentAnalysisService.analyze(message);
+        log.info("Received answer '{}' for message '{}", analysis, message);
+        client.newCompleteCommand(job.getKey()).variable("anfrageIsBeschwerde", analysis).send().join();
     }
 }

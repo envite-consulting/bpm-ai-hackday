@@ -16,8 +16,9 @@ public class SentimentAnalysisService {
         this.sentimentAssistant = sentimentAssistant;
     }
 
-    public String analyze(String message) {
-        String template = "Is the provided message positive, negative, or neutral? Do a sentiment on the followiong message: {{message}}";
+    public boolean analyze(String message) {
+        String template = "Is the provided message a request or a complaint? " +  
+        "Do an analysis on the followiong message: {{message}}";
         PromptTemplate promptTemplate = PromptTemplate.from(template);
         Map<String, Object> variables = new HashMap<>();
         variables.put("message", message);

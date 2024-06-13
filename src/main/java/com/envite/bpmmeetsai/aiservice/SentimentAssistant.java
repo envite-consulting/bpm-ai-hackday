@@ -7,5 +7,5 @@ import dev.langchain4j.service.spring.AiService;
 public interface SentimentAssistant {
 
     @SystemMessage("You are an customer service expert")
-    boolean analyze(String message);
+    double analyze(String message);
 }

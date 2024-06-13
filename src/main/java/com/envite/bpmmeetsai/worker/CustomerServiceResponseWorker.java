@@ -22,8 +22,10 @@ public class CustomerServiceResponseWorker {
     public void analysiereAnfrage(final JobClient client, final ActivatedJob job) {
         final Map<String, Object> variables = job.getVariablesAsMap();
         final String message = (String) variables.get("OutputVariable_kundenAnfrage");
-        boolean analysis = sentimentAnalysisService.analyze(message);
-        log.info("Received answer '{}' for message '{}", analysis, message);
-        client.newCompleteCommand(job.getKey()).variable("anfrageIsBeschwerde", analysis).send().join();
+        double analysis = sentimentAnalysisService.analyze(message);
+        log.info("Received positivity score {} for message '{}'", analysis, message);
+        boolean isBeschwerde = analysis < 0.5;
+        client.newCompleteCommand(job.getKey()).variable("anfrageIsBeschwerde", isBeschwerde)
+            .send().join();
     }
 }

@@ -8,22 +8,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class SentimentAnalysisService {
+public class AutomatischeAntwortService {
 
-    SentimentAssistant sentimentAssistant;
+    AutomatischeAntwortAssistant automatischeAntwortAssistant;
 
-    public SentimentAnalysisService(SentimentAssistant sentimentAssistant) {
-        this.sentimentAssistant = sentimentAssistant;
+    public AutomatischeAntwortService(AutomatischeAntwortAssistant automatischeAntwortAssistant) {
+        this.automatischeAntwortAssistant = automatischeAntwortAssistant;
     }
 
-    public boolean analyze(String message) {
-        String template = "Is the provided message a customer complaint? " +
-        "Do an analysis on the following message: {{message}}";
+    public String automatischBeantworten(String message) {
+        String template = "Answer the following message: {{message}}";
         PromptTemplate promptTemplate = PromptTemplate.from(template);
         Map<String, Object> variables = new HashMap<>();
         variables.put("message", message);
         Prompt prompt = promptTemplate.apply(variables);
 
-        return sentimentAssistant.analyze(prompt.text());
+        return automatischeAntwortAssistant.generateAutomatischeAntwort(message);
     }
 }

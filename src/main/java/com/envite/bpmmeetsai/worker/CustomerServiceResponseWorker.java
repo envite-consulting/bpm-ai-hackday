@@ -1,7 +1,6 @@
 package com.envite.bpmmeetsai.worker;
 
 import com.envite.bpmmeetsai.aiservice.SentimentAnalysisService;
-import com.envite.bpmmeetsai.aiservice.SentimentAssistant;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
 import io.camunda.zeebe.spring.client.annotation.JobWorker;
@@ -22,9 +21,9 @@ public class CustomerServiceResponseWorker {
     public void analysiereAnfrage(final JobClient client, final ActivatedJob job) {
         final Map<String, Object> variables = job.getVariablesAsMap();
         final String message = (String) variables.get("OutputVariable_kundenAnfrage");
-        double analysis = sentimentAnalysisService.analyze(message);
+        boolean analysis = sentimentAnalysisService.analyze(message);
         log.info("Received positivity score {} for message '{}'", analysis, message);
-        boolean isBeschwerde = analysis < 0.5;
+        boolean isBeschwerde = analysis;
         client.newCompleteCommand(job.getKey()).variable("anfrageIsBeschwerde", isBeschwerde)
             .send().join();
     }

@@ -17,12 +17,12 @@ public class AutomatischeAntwortWorker {
 
     private final AutomatischeAntwortService automatischeAntwortService;
 
-    @JobWorker(name = "automatischBeantworten")
+    @JobWorker(name = "automatischBeantworten", autoComplete = false)
     public void automatischBeantworten(final JobClient client, final ActivatedJob job) {
         final Map<String, Object> variables = job.getVariablesAsMap();
         final String message = (String) variables.get("OutputVariable_kundenAnfrage");
-        String autpomatischeAntwort = automatischeAntwortService.automatischBeantworten(message);
-        log.info("Received answer '{}' for message '{}", autpomatischeAntwort, message);
-        client.newCompleteCommand(job.getKey()).send().join();
+        String automatischeAntwort = automatischeAntwortService.automatischBeantworten(message);
+        log.info("Received answer '{}' for message '{}", automatischeAntwort, message);
+        client.newCompleteCommand(job.getKey()).variable("automatischeAntwort", automatischeAntwort).send().join();
     }
 }

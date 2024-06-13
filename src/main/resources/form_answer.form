@@ -9,6 +9,16 @@
       },
       "id": "Field_0jyxpjm",
       "key": "textfield_anfragenAntwort"
+    },
+    {
+      "label": "automatischeAntwort",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0sqdmef",
+        "columns": null
+      },
+      "id": "Field_0fh1zpu",
+      "key": "textarea_AutomatischeAntwort"
     }
   ],
   "type": "default",

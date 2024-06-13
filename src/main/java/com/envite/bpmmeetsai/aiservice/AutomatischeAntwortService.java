@@ -17,7 +17,7 @@ public class AutomatischeAntwortService {
     }
 
     public String automatischBeantworten(String message) {
-        String template = "Answer the following message: {{message}}";
+        String template = "Answer the following customer service request considering our AGBs and Storinerungszeiträume. {{message}}";
         PromptTemplate promptTemplate = PromptTemplate.from(template);
         Map<String, Object> variables = new HashMap<>();
         variables.put("message", message);

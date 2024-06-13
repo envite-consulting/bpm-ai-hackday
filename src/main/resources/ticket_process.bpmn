@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1xiqdi5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.24.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1xiqdi5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.24.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
   <bpmn:collaboration id="Collaboration_13pf9cj">
     <bpmn:participant id="Participant_17wrjoi" processRef="Ticket_Processing" />
+    <bpmn:textAnnotation id="TextAnnotation_0g297hl">
+      <bpmn:text>- Sentimentanalyse
+- Antwort Parsen als Objekt
+- Fachdaten anreichern
+- Tooling/LLM ruft funktionen auf
+- Automatische Mail generieren</bpmn:text>
+    </bpmn:textAnnotation>
   </bpmn:collaboration>
   <bpmn:process id="Ticket_Processing" name="Ticket Processing" isExecutable="true">
     <bpmn:extensionElements>
@@ -15,7 +22,30 @@
         "columns": null
       },
       "id": "Field_0jyxpjm",
-      "key": "textfield_answer"
+      "key": "kundenAnfrage"
+    }
+  ],
+  "type": "default",
+  "id": "Form_1bwatnm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.5.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.24.0"
+  },
+  "schemaVersion": 16
+}</zeebe:userTaskForm>
+      <zeebe:userTaskForm id="UserTaskForm_11s28ul">{
+  "components": [
+    {
+      "label": "anfragenAntwort",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1krmwfh",
+        "columns": null
+      },
+      "id": "Field_0jyxpjm",
+      "key": "textfield_anfragenAntwort"
     }
   ],
   "type": "default",
@@ -32,34 +62,75 @@
     <bpmn:startEvent id="StartEvent_1" name="Ticket recieved">
       <bpmn:outgoing>Flow_1adijz0</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1adijz0" sourceRef="StartEvent_1" targetRef="UserTask_AnswerTicket" />
-    <bpmn:userTask id="UserTask_AnswerTicket" name="Answer the ticket">
+    <bpmn:sequenceFlow id="Flow_1adijz0" sourceRef="StartEvent_1" targetRef="UserTask_KundenAnfrage" />
+    <bpmn:userTask id="UserTask_KundenAnfrage" name="Kundenanfrage">
       <bpmn:extensionElements>
         <zeebe:ioMapping>
-          <zeebe:output source="=textfield_answer" target="OutputVariable_customerServiceAnswer" />
+          <zeebe:output source="=kundenAnfrage" target="OutputVariable_kundenAnfrage" />
         </zeebe:ioMapping>
         <zeebe:formDefinition formKey="camunda-forms:bpmn:UserTaskForm_0d3mt9o" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1adijz0</bpmn:incoming>
       <bpmn:outgoing>Flow_1r3r6k8</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1r3r6k8" sourceRef="UserTask_AnswerTicket" targetRef="Service_Task" />
-    <bpmn:serviceTask id="Service_Task" name="Analyze the answer">
+    <bpmn:sequenceFlow id="Flow_1r3r6k8" sourceRef="UserTask_KundenAnfrage" targetRef="ServiceTask_AnfrageAnalysieren" />
+    <bpmn:exclusiveGateway id="Gateway_10v6zmu">
+      <bpmn:incoming>Flow_1gea5w6</bpmn:incoming>
+      <bpmn:outgoing>Flow_15umu6i</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0mbvi23</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1gea5w6" sourceRef="ServiceTask_AnfrageAnalysieren" targetRef="Gateway_10v6zmu" />
+    <bpmn:sequenceFlow id="Flow_15umu6i" sourceRef="Gateway_10v6zmu" targetRef="Activity_1nbvzf0">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=anfrageIsBeschwerde</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_15fh6zl" sourceRef="Activity_1nbvzf0" targetRef="Gateway_1ohjrt0" />
+    <bpmn:serviceTask id="ServiceTask_AnfrageAnalysieren" name="Anfrage anlysieren">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="analyzeAnswer" />
+        <zeebe:taskDefinition type="analysiereAnfrage" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1r3r6k8</bpmn:incoming>
-      <bpmn:outgoing>Flow_0qqsn5d</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1gea5w6</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0qqsn5d" sourceRef="Service_Task" targetRef="Event_10czdse" />
+    <bpmn:exclusiveGateway id="Gateway_1ohjrt0">
+      <bpmn:incoming>Flow_15fh6zl</bpmn:incoming>
+      <bpmn:incoming>Flow_0em82hl</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yd91mx</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0yd91mx" sourceRef="Gateway_1ohjrt0" targetRef="SendTask_EmailAnKunde" />
     <bpmn:endEvent id="Event_10czdse">
-      <bpmn:incoming>Flow_0qqsn5d</bpmn:incoming>
+      <bpmn:incoming>Flow_11f95rm</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:sendTask id="SendTask_EmailAnKunde" name="Email an Kunde">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="emailAnKunde" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0yd91mx</bpmn:incoming>
+      <bpmn:outgoing>Flow_11f95rm</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_11f95rm" sourceRef="SendTask_EmailAnKunde" targetRef="Event_10czdse" />
+    <bpmn:sequenceFlow id="Flow_0mbvi23" sourceRef="Gateway_10v6zmu" targetRef="ServiceTask_AnfrageAutomatischBeantworten">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not (anfrageIsBeschwerde)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="ServiceTask_AnfrageAutomatischBeantworten" name="Anfrage automatisch beantworten">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="automatischBeantworten" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0mbvi23</bpmn:incoming>
+      <bpmn:outgoing>Flow_0em82hl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0em82hl" sourceRef="ServiceTask_AnfrageAutomatischBeantworten" targetRef="Gateway_1ohjrt0" />
+    <bpmn:userTask id="Activity_1nbvzf0" name="Anfrage manuell bearbeiten">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:UserTaskForm_11s28ul" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_15umu6i</bpmn:incoming>
+      <bpmn:outgoing>Flow_15fh6zl</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_13pf9cj">
       <bpmndi:BPMNShape id="Participant_17wrjoi_di" bpmnElement="Participant_17wrjoi" isHorizontal="true">
-        <dc:Bounds x="129" y="52" width="851" height="358" />
+        <dc:Bounds x="129" y="52" width="1161" height="358" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="192" y="202" width="36" height="36" />
@@ -67,16 +138,33 @@
           <dc:Bounds x="173" y="245" width="74" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1tk1n0n_di" bpmnElement="UserTask_AnswerTicket">
+      <bpmndi:BPMNShape id="Activity_1tk1n0n_di" bpmnElement="UserTask_KundenAnfrage">
         <dc:Bounds x="280" y="180" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0gn6x9n_di" bpmnElement="Service_Task">
+      <bpmndi:BPMNShape id="Gateway_10v6zmu_di" bpmnElement="Gateway_10v6zmu" isMarkerVisible="true">
+        <dc:Bounds x="605" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gn6x9n_di" bpmnElement="ServiceTask_AnfrageAnalysieren">
         <dc:Bounds x="440" y="180" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ohjrt0_di" bpmnElement="Gateway_1ohjrt0" isMarkerVisible="true">
+        <dc:Bounds x="945" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_10czdse_di" bpmnElement="Event_10czdse">
-        <dc:Bounds x="622" y="202" width="36" height="36" />
+        <dc:Bounds x="1192" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0k3v3ru" bpmnElement="SendTask_EmailAnKunde">
+        <dc:Bounds x="1050" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0u05do3_di" bpmnElement="ServiceTask_AnfrageAutomatischBeantworten">
+        <dc:Bounds x="750" y="290" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fa6bcv_di" bpmnElement="Activity_1nbvzf0">
+        <dc:Bounds x="750" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1adijz0_di" bpmnElement="Flow_1adijz0">
         <di:waypoint x="228" y="220" />
@@ -86,10 +174,42 @@
         <di:waypoint x="380" y="220" />
         <di:waypoint x="440" y="220" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0qqsn5d_di" bpmnElement="Flow_0qqsn5d">
+      <bpmndi:BPMNEdge id="Flow_1gea5w6_di" bpmnElement="Flow_1gea5w6">
         <di:waypoint x="540" y="220" />
-        <di:waypoint x="622" y="220" />
+        <di:waypoint x="605" y="220" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15umu6i_di" bpmnElement="Flow_15umu6i">
+        <di:waypoint x="630" y="195" />
+        <di:waypoint x="630" y="120" />
+        <di:waypoint x="750" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15fh6zl_di" bpmnElement="Flow_15fh6zl">
+        <di:waypoint x="850" y="120" />
+        <di:waypoint x="970" y="120" />
+        <di:waypoint x="970" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yd91mx_di" bpmnElement="Flow_0yd91mx">
+        <di:waypoint x="995" y="220" />
+        <di:waypoint x="1050" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11f95rm_di" bpmnElement="Flow_11f95rm">
+        <di:waypoint x="1150" y="220" />
+        <di:waypoint x="1192" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mbvi23_di" bpmnElement="Flow_0mbvi23">
+        <di:waypoint x="630" y="245" />
+        <di:waypoint x="630" y="330" />
+        <di:waypoint x="750" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0em82hl_di" bpmnElement="Flow_0em82hl">
+        <di:waypoint x="850" y="330" />
+        <di:waypoint x="970" y="330" />
+        <di:waypoint x="970" y="245" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0g297hl_di" bpmnElement="TextAnnotation_0g297hl">
+        <dc:Bounds x="390" y="60" width="280" height="84" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

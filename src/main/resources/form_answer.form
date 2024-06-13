@@ -1,14 +1,14 @@
 {
   "components": [
     {
-      "label": "answer",
+      "label": "anfragenAntwort",
       "type": "textfield",
       "layout": {
         "row": "Row_1krmwfh",
         "columns": null
       },
       "id": "Field_0jyxpjm",
-      "key": "textfield_answer"
+      "key": "textfield_anfragenAntwort"
     }
   ],
   "type": "default",
